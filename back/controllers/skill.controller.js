@@ -1,15 +1,21 @@
 const Skill = require('../models/skill.model');
 
+exports.all = function (req, res) {
+    Skill.find({}, function (err, skills) {
+        res.send(skills);
+    });
+};
+
 exports.create = function (req, res) {
     let skill = new Skill({
         name: req.body.name
     });
 
-    skill.save(function (err) {
+    skill.save(function (err, skill) {
         if (err) {
             res.send(err.toString());
         }
-        res.send('User Created');
+        res.send(skill);
     })
 };
 

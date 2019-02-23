@@ -1,9 +1,26 @@
 const User = require('../models/user.model');
 
+exports.all = function (req, res) {
+    User.find({})
+        .populate('department', ['name'])
+        .populate('position', ['name'])
+        .populate('skill', ['name'])
+        .exec(function(err, users) {
+
+            if (err) {
+                res.send(err.toString());
+            }
+            res.send(users);
+    });
+};
+
 exports.create = function (req, res) {
     let user = new User({
         name: req.body.name,
-        avatar: req.body.avatar,
+        avatar: saveAvatar(req.body.avatar),
+        department: req.body.department,
+        position: req.body.position,
+        skill: req.body.skill,
     });
 
     user.save(function (err, user) {
@@ -15,16 +32,27 @@ exports.create = function (req, res) {
 };
 
 exports.get = function (req, res) {
-    User.findById(req.params.id, function (err, user) {
-        if (err) {
-            return res.send(err.toString());
-        }
-        res.send(user);
-    });
+    User.findById(req.params.id)
+        .populate('department', ['name'])
+        .populate('position', ['name'])
+        .populate('skill', ['name'])
+        .exec(function(err, users) {
+
+            if (err) {
+                res.send(err.toString());
+            }
+            res.send(users);
+        });
 };
 
 exports.update = function (req, res) {
-    User.findByIdAndUpdate(req.params.id, {$set: req.body}, function (err, user) {
+    let data = req.body;
+
+    if (data.avatar) {
+        data.avatar = saveAvatar(data.avatar);
+    }
+
+    User.findByIdAndUpdate(req.params.id, {$set: data}, function (err, user) {
         if (err) {
             return res.send(err.toString());
         }
@@ -39,4 +67,17 @@ exports.delete = function (req, res) {
         }
         res.send('user deleted');
     })
+};
+
+saveAvatar = function (avatarData) {
+    let base64Data = avatarData.replace(/^data:image\/png;base64,/, "");
+    let path = "uploads/" + Date.now() + "_avatar.jpg";
+
+    require("fs").writeFile(path, base64Data, 'base64', function(err) {
+        if (err) {
+            return res.send(err.toString());
+        }
+    });
+
+    return path;
 };

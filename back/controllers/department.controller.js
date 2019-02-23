@@ -1,5 +1,11 @@
 const Department = require('../models/department.model');
 
+exports.all = function (req, res) {
+    Department.find({}, function (err, departments) {
+        res.send(departments);
+    });
+};
+
 exports.create = function (req, res) {
     let department = new Department({
         name: req.body.name

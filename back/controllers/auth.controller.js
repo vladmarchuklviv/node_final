@@ -3,10 +3,6 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user.model');
 
-exports.test = function (req, res) {
-    res.send('Greetings from the Test controller!');
-};
-
 exports.login = function (req, res) {
 
     let { email, password } = req.body;

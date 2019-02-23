@@ -1,15 +1,21 @@
 const Position = require('../models/position.model');
 
+exports.all = function (req, res) {
+    Position.find({}, function (err, positions) {
+        res.send(positions);
+    });
+};
+
 exports.create = function (req, res) {
     let position = new Position({
         name: req.body.name
     });
 
-    position.save(function (err) {
+    position.save(function (err, position) {
         if (err) {
             res.send(err.toString());
         }
-        res.send('User Created');
+        res.send(position);
     })
 };
 

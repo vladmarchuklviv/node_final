@@ -18,12 +18,10 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use('/auth', auth);
-app.use('/users', user);
+app.use('/user', user);
 app.use('/department', department);
 app.use('/position', position);
 app.use('/skill', skill);
-
-
 
 app.listen(3000, () => {
     console.log('Server is up and running on port numner 3000');

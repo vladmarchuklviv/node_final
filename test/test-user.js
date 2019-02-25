@@ -24,12 +24,12 @@ describe('User', () => {
 
     describe('/POST user ', () => {
         it('create user', (done) => {
-            let book = {
+            let user = {
                 name: "Vlad"
             };
             chai.request(server)
                 .post('/user/create')
-                .send(book)
+                .send(user)
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
